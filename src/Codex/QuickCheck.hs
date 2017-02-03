@@ -6,6 +6,7 @@ module Codex.QuickCheck
    , module Test.QuickCheck.Exception
    , module Test.QuickCheck.Random
    , module Test.QuickCheck.Test
+   , module Test.QuickCheck.All
    , module Codex.QuickCheck.Modifiers
    , module Codex.QuickCheck.C
    ) where
@@ -16,6 +17,7 @@ import Test.QuickCheck.Property hiding (Result(..))
 import Test.QuickCheck.Exception
 import Test.QuickCheck.Random
 import Test.QuickCheck.Test
+import Test.QuickCheck.All
 
 import Codex.QuickCheck.Modifiers
 import Codex.QuickCheck.C
