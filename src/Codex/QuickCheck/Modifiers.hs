@@ -7,15 +7,21 @@ import Test.QuickCheck.Gen
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Property
 
-newtype NonNegative a = NonNegative a deriving (Eq, Ord)
 
-newtype Positive a = Positive a deriving (Eq,Ord)
+newtype NonNegative a
+  = NonNegative {getNonNegative :: a} deriving (Eq, Ord)
 
-newtype NonZero a = NonZero a deriving (Eq,Ord)
+newtype Positive a
+  = Positive {getPositive :: a} deriving (Eq, Ord)
 
-newtype OrderedList a = Ordered [a] deriving (Eq, Ord)
+newtype NonZero a
+  = NonZero {getNonZero :: a} deriving (Eq, Ord)
 
-newtype NonEmptyList a = NonEmpty [a] deriving (Eq, Ord)
+newtype OrderedList a
+  = Ordered {getOrdered :: [a]} deriving (Eq, Ord)
+
+newtype NonEmptyList a
+  = NonEmpty {getNonEmpty :: [a]} deriving (Eq, Ord)
 
 instance Show a => Show (NonNegative a) where
   showsPrec prec (NonNegative x) = showsPrec prec x

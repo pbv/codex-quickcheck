@@ -8,6 +8,7 @@ module Codex.QuickCheck
    , module Test.QuickCheck.Test
    , module Test.QuickCheck.All
    , module Codex.QuickCheck.Modifiers
+   , module Codex.QuickCheck.Assertions
    , module Codex.QuickCheck.C
    ) where
 
@@ -20,6 +21,7 @@ import Test.QuickCheck.Test
 import Test.QuickCheck.All
 
 import Codex.QuickCheck.Modifiers
+import Codex.QuickCheck.Assertions
 import Codex.QuickCheck.C
 
 
