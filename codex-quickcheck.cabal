@@ -1,5 +1,5 @@
 name:                codex-quickcheck
-version:             0.1.0.0
+version:             0.1.0.2
 synopsis:            Customized QuickCheck testing 
 description:         Please see README.md
 homepage:            https://github.com/pbv/codex-quickcheck
@@ -19,8 +19,8 @@ library
                        Codex.QuickCheck.C
                        Codex.QuickCheck.Modifiers
                        Codex.QuickCheck.Assertions
-  build-depends:       base                  >= 4.7 && < 5,
-                       QuickCheck            >= 2.8
+  build-depends:       base, 
+                       QuickCheck
   default-language:    Haskell2010 
 
 

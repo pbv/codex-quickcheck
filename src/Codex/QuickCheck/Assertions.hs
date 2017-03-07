@@ -1,18 +1,18 @@
 
 module Codex.QuickCheck.Assertions (
-  (?==), (==?), (<?>)
+  (?==), (==?), (?/=), (/=?), (<?>)
   ) where
 
 import Test.QuickCheck.Property
 
 assert :: String -> Bool -> Result
 assert fmt pre = if pre then succeeded
-                   else failed { reason = fmt }
+                  else failed { reason = fmt }
 
 infix 2 <?>
-infix 4 ?==, ==?
+infix 4 ?==, ==?, ?/=, /=?
 
-  
+
 -- | Left argument should be equal to right one
 (?==) :: (Eq a, Show a) => a -> a -> Result
 x ?== y = assert fmt (x==y)
@@ -22,9 +22,18 @@ x ?== y = assert fmt (x==y)
 (==?) :: (Eq a, Show a) => a -> a -> Result
 (==?) = flip (?==)
 
+-- | Left argument should not be equal to right one
+(?/=) :: (Eq a, Show a) => a -> a -> Result
+x ?/= y = assert fmt (x/=y)
+  where fmt = "Expected not equal to:\n\t" ++ show y ++ "\n"
+
+(/=?) :: (Eq a, Show a) => a -> a -> Result
+(/=?) = flip (?/=)
+
 
 -- | append an explanatory message in case of failure
-(<?>) :: Result -> String -> Result
-result <?> msg    
-  | ok result == Just False = result { reason = reason result ++ msg }
-  | otherwise               = result 
+(<?>) :: Result -> String -> Property
+result <?> info
+  | ok result == Just False = property (result { reason = reason' })
+  | otherwise               = property result
+  where reason' = reason result ++ "Testing " ++ info ++ " with:"
