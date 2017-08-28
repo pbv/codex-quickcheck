@@ -1,5 +1,5 @@
 name:                codex-quickcheck
-version:             0.1.0.2
+version:             0.1.0.3
 synopsis:            Customized QuickCheck testing 
 description:         Please see README.md
 homepage:            https://github.com/pbv/codex-quickcheck
