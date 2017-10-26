@@ -9,6 +9,7 @@ module Codex.QuickCheck
    , module Test.QuickCheck.All
    , module Codex.QuickCheck.Modifiers
    , module Codex.QuickCheck.Assertions
+   , module Codex.QuickCheck.Args
    , module Codex.QuickCheck.C
    ) where
 
@@ -17,11 +18,12 @@ import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Property hiding (Result(..))
 import Test.QuickCheck.Exception
 import Test.QuickCheck.Random
-import Test.QuickCheck.Test
+import Test.QuickCheck.Test hiding (maxSuccess, maxSize, maxDiscardRatio, replay, chatty)
 import Test.QuickCheck.All
 
 import Codex.QuickCheck.Modifiers
 import Codex.QuickCheck.Assertions
+import Codex.QuickCheck.Args
 import Codex.QuickCheck.C
 
 
