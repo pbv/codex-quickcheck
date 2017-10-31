@@ -1,3 +1,5 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DeriveFunctor #-}
 module Codex.QuickCheck.C
   (
     module Foreign.C,
@@ -7,8 +9,7 @@ module Codex.QuickCheck.C
     withCheckedArray,
     withCheckedArrayLen,
     BufferOverflow(..),
-    CArray,
-    c_array,
+    CArray(..),
     showArray,
     showsArray
   ) where
@@ -114,13 +115,14 @@ canarySize = 4
 
 -- * utility functions
 
-newtype CArray a = CArray [a] deriving Eq
+newtype CArray a = CArray [a] deriving (Eq, Functor, Foldable)
 
 instance Show a => Show (CArray a) where
   showsPrec _ (CArray xs) = showsArray xs
 
-c_array :: [a] -> CArray a
-c_array = CArray
+instance Arbitrary a => Arbitrary (CArray a) where
+  arbitrary = CArray <$> arbitrary
+  shrink (CArray xs) = map CArray (shrink xs)
 
 
 -- | show lists with C-style array literal syntax
@@ -130,4 +132,5 @@ showArray xs = showsArray xs ""
 showsArray :: Show a => [a] -> ShowS
 showsArray xs
   = ('{':) . (foldr (.) id $ intersperse (',':) $ map shows xs) . ('}':)
+
 

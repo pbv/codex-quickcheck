@@ -3,7 +3,12 @@ module Codex.QuickCheck.Assertions (
   assert,
   (?==), (==?), (?/=), (/=?),
   (?>), (?>=), (?<), (?<=),
-  (<?>)
+  (<?>),
+  absoluteEq,
+  relativeEq,
+  assertCond,
+  assertAbsEq,
+  assertRelEq
   ) where
 
 import Test.QuickCheck.Property
@@ -59,3 +64,23 @@ result <?> info
   | ok result == Just False = property (result { reason = reason' })
   | otherwise               = property result
   where reason' = reason result ++ "Testing " ++ info ++ " with:"
+
+
+-- | comparing floating point numbers
+absoluteEq :: RealFloat a => a -> a -> a -> Bool
+absoluteEq eps x y = abs (x-y) <= eps
+
+relativeEq :: RealFloat a => a -> a -> a -> Bool
+relativeEq eps x y = abs (x-y) <= max (abs x) (abs y) * eps
+
+-- blames the second argument when a condition fails
+assertCond :: Show a => (a -> a -> Bool) -> a -> a -> Result
+assertCond cond answer trial = assert msg (cond answer trial)
+  where msg = "Expected:\n\t" ++ show answer ++
+              "\nGot:\n\t" ++ show trial ++ "\n"
+
+assertAbsEq eps = assertCond (absoluteEq eps)
+
+assertRelEq eps = assertCond (relativeEq eps)
+
+
