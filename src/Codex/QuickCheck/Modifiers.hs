@@ -103,6 +103,10 @@ labeledWithForAllShrink showf gen shrinker pf =
     shrinking shrinker x $ \x' ->
       counterexample (showf x') (pf x')
 
+labeledForAllShrink :: (Show a, Testable prop)
+                    => String -> Gen a -> (a -> [a]) -> (a -> prop) -> Property
+labeledForAllShrink name = labeledWithForAllShrink (\v -> name ++ " = " ++ show v) 
+
 -- | same as above, but no shrinking
 labeledWithForAll :: (Testable prop)
              => (a -> String) -> Gen a -> (a -> prop) -> Property
@@ -110,7 +114,7 @@ labeledWithForAll showf gen = labeledWithForAllShrink showf gen (const [])
 
 labeledForAll :: (Show a, Testable prop)
              => String -> Gen a -> (a -> prop) -> Property
-labeledForAll name = labeledWithForAll (\v -> name ++ " = " ++ show v) 
+labeledForAll name gen = labeledForAllShrink name gen (const [])
 
 
 -- | show an argument and quantify over it

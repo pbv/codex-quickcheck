@@ -8,7 +8,7 @@ module Codex.QuickCheck.C
     module Foreign.Marshal.Array,
     withCheckedArray,
     withCheckedArrayLen,
-    BufferOverflow(..),
+    ArrayOverflow(..),
     CArray(..),
     showArray,
     showsArray
@@ -77,12 +77,12 @@ instance Arbitrary CDouble where
 
 
 
--- | exceptions for buffer overflows
-data BufferOverflow = BufferOverwrite
-                    | BufferUnderwrite
+-- | exceptions for array index overflows
+data ArrayOverflow = ArrayBufferOverwrite
+                   | ArrayBufferUnderwrite
                     deriving Show
 
-instance Exception BufferOverflow
+instance Exception ArrayOverflow
 
 
 -- | C array allocators with buffer overflow checks
@@ -103,8 +103,8 @@ withCheckedArrayLen values action = do
     prefix' <- peekArray canarySize ptr
     let ptr''= advancePtr ptr (len - canarySize) -- start of trailing canary
     postfix'<- peekArray canarySize ptr''
-    unless (prefix' == prefix) $ throwIO BufferUnderwrite
-    unless (postfix' == postfix) $ throwIO BufferOverwrite
+    unless (prefix' == prefix) $ throwIO ArrayBufferUnderwrite
+    unless (postfix' == postfix) $ throwIO ArrayBufferOverwrite
     -- OK, passed checks
     return result
 
