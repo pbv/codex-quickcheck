@@ -11,6 +11,7 @@ module Codex.QuickCheck
    , module Codex.QuickCheck.Assertions
    , module Codex.QuickCheck.Args
    , module Codex.QuickCheck.C
+   , module Codex.QuickCheck.Runner
    ) where
 
 import Test.QuickCheck.Gen
@@ -25,5 +26,5 @@ import Codex.QuickCheck.Modifiers
 import Codex.QuickCheck.Assertions
 import Codex.QuickCheck.Args
 import Codex.QuickCheck.C
-
+import Codex.QuickCheck.Runner
 

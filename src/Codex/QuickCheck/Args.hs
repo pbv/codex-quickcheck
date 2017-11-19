@@ -1,33 +1,38 @@
-{-# LANGUAGE RecordWildCards #-}
 
-module Codex.QuickCheck.Args where
+module Codex.QuickCheck.Args (getQCArgs) where
 
-import qualified Test.QuickCheck as QC
+import           Data.List (foldl')
+import           System.Environment
+import           System.Console.GetOpt
+import           Test.QuickCheck (Args(..), stdArgs)
 import qualified Test.QuickCheck.Random as QC
 
--- | wrapper type for serializing Quickcheck arguments to/from strings
-data CodexArgs = CodexArgs { maxSuccess      :: Int
-                           , maxSize         :: Int
-                           , maxDiscardRatio :: Int
-                           , randSeed        :: Maybe Int
-                           , chatty          :: Bool
-                           } deriving (Eq, Show, Read)
+options :: [OptDescr (Args -> Args)]
+options =
+  [ Option [] ["maxSuccess"]
+    (ReqArg (\str args -> args {maxSuccess = read str}) "INT")
+    "Number of tests to pass"
+  , Option [] ["maxSize"]
+    (ReqArg (\str args -> args {maxSize = read str}) "INT")
+    "Maximum test data size to generate"
+  , Option [] ["maxDiscardRatio"]
+    (ReqArg (\str args -> args{maxDiscardRatio=read str}) "INT")
+    "Maximum ratio of discarded test cases"
+  , Option [] ["randSeed"]
+    (ReqArg (\str args -> let seed = read str
+                          in args {replay = Just (QC.mkQCGen seed,0)}) "INT")
+    "Fix seed for random test case generator"
+  ]
 
 
-defaultArgs :: CodexArgs
-defaultArgs = CodexArgs { maxSuccess = 100
-                        , maxSize   = 100
-                        , maxDiscardRatio = 10
-                        , randSeed = Nothing
-                        , chatty = True
-                        }
-
-makeQCArgs :: CodexArgs -> QC.Args
-makeQCArgs CodexArgs{..}
-  = QC.Args { QC.maxSuccess = maxSuccess
-            , QC.maxSize   = maxSize
-            , QC.maxDiscardRatio = maxDiscardRatio
-            , QC.replay = fmap (\s -> (QC.mkQCGen s, 0)) randSeed
-            , QC.chatty = chatty
-            }
+getQCArgs :: IO Args
+getQCArgs = do
+  argv <- getArgs
+  arg0 <- getProgName
+  case getOpt Permute options argv of
+    (o, _, []) -> return (foldl' (flip id) stdArgs o)
+    (o, _, errs) ->
+      let header = "usage: " ++ arg0 ++ " [OPTION...]"
+      in ioError (userError (concat errs ++ usageInfo header options))
+  
 
