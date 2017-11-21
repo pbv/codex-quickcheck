@@ -9,9 +9,8 @@ module Codex.QuickCheck
    , module Test.QuickCheck.All
    , module Codex.QuickCheck.Modifiers
    , module Codex.QuickCheck.Assertions
-   , module Codex.QuickCheck.Args
    , module Codex.QuickCheck.C
-   , module Codex.QuickCheck.Runner
+   , module Codex.QuickCheck.Main
    ) where
 
 import Test.QuickCheck.Gen
@@ -24,7 +23,6 @@ import Test.QuickCheck.All
 
 import Codex.QuickCheck.Modifiers
 import Codex.QuickCheck.Assertions
-import Codex.QuickCheck.Args
 import Codex.QuickCheck.C
-import Codex.QuickCheck.Runner
+import Codex.QuickCheck.Main
 

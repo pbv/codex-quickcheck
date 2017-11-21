@@ -22,6 +22,9 @@ options =
     (ReqArg (\str args -> let seed = read str
                           in args {replay = Just (QC.mkQCGen seed,0)}) "INT")
     "Fix seed for random test case generator"
+  , Option ['q'] ["quiet"]
+    (NoArg (\args -> args {chatty = False}))
+    "Reduce verbosity"
   ]
 
 
