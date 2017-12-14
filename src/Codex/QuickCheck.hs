@@ -18,7 +18,7 @@ import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Property hiding (Result(..))
 import Test.QuickCheck.Exception
 import Test.QuickCheck.Random
-import Test.QuickCheck.Test hiding (maxSuccess, maxSize, maxDiscardRatio, replay, chatty)
+import Test.QuickCheck.Test 
 import Test.QuickCheck.All
 
 import Codex.QuickCheck.Modifiers
