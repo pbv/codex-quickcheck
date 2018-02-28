@@ -6,7 +6,7 @@ module Codex.QuickCheck.Modifiers where
 import Data.List (nub)
 import Test.QuickCheck.Gen
 import Test.QuickCheck.Arbitrary
-import Test.QuickCheck.Property
+-- import Test.QuickCheck.Property
 
 newtype NonNegative a
   = NonNegative {getNonNegative :: a} deriving (Eq, Ord)
@@ -92,10 +92,15 @@ instance Arbitrary a => Arbitrary (NonEmptyList a) where
 
 
 
-
+{-
 -- | Like 'forAllShrink', but shows the counterexample with a custom function
-labeledWithForAllShrink :: (Testable prop)
-                    => (a -> String) -> Gen a -> (a -> [a]) -> (a -> prop) -> Property
+labeledWithForAllShrink ::
+  (Testable prop)
+  => (a -> String)
+  -> Gen a
+  -> (a -> [a])
+  -> (a -> prop)
+  -> Property
 labeledWithForAllShrink showf gen shrinker pf =
   MkProperty $
   gen >>= \x ->
@@ -103,33 +108,63 @@ labeledWithForAllShrink showf gen shrinker pf =
     shrinking shrinker x $ \x' ->
       counterexample (showf x') (pf x')
 
-labeledForAllShrink :: (Show a, Testable prop)
-                    => String -> Gen a -> (a -> [a]) -> (a -> prop) -> Property
-labeledForAllShrink name = labeledWithForAllShrink (\v -> name ++ " = " ++ show v) 
+labeledForAllShrink ::
+  (Show a, Testable prop) 
+  => String
+  -> Gen a
+  -> (a -> [a])
+  -> (a -> prop)
+  -> Property
+labeledForAllShrink name
+  = labeledWithForAllShrink (\v -> name ++ " = " ++ show v) 
 
 -- | same as above, but no shrinking
-labeledWithForAll :: (Testable prop)
-             => (a -> String) -> Gen a -> (a -> prop) -> Property
-labeledWithForAll showf gen = labeledWithForAllShrink showf gen (const [])
+labeledWithForAll ::
+  (Testable prop)
+  => (a -> String)
+  -> Gen a
+  -> (a -> prop)
+  -> Property
+labeledWithForAll showf gen
+  = labeledWithForAllShrink showf gen (const [])
 
-labeledForAll :: (Show a, Testable prop)
-             => String -> Gen a -> (a -> prop) -> Property
-labeledForAll name gen = labeledForAllShrink name gen (const [])
+labeledForAll ::
+  (Show a, Testable prop)
+  => String
+  -> Gen a
+  -> (a -> prop)
+  -> Property
+labeledForAll name gen 
+  = labeledForAllShrink name gen (const [])
 
 
 -- | show an argument and quantify over it
-labeledWith :: (Arbitrary a, Testable prop)
-            => (a -> String) -> (a -> prop) -> Property
+labeledWith ::
+  (Arbitrary a, Testable prop)
+  => (a -> String)
+  -> (a -> prop)
+  -> Property
 labeledWith showf pf = labeledWithForAllShrink showf arbitrary shrink pf
 
 
-labeled :: (Arbitrary a, Show a, Testable prop)
-        => String -> (a -> prop) -> Property
-labeled name = labeledWith (\x -> name ++ " = " ++ show x)
+labeled ::
+  (Arbitrary a, Show a, Testable prop)
+  => String
+  -> (a -> prop)
+  -> Property
+labeled name
+  = labeledWith (\x -> name ++ " = " ++ show x)
 
 
 -- | name a value so that it to appears as a counterexample
-labeledLet :: (Show a, Testable prop)
-           => String -> a -> (a -> prop) -> Property
-labeledLet name val = labeledWithForAll (\v -> name ++ " = " ++ show v) (return val) 
+labeledLet
+  :: (Show a, Testable prop)
+  => String
+  -> a
+  -> (a -> prop)
+  -> Property
+labeledLet name val
+  = labeledWithForAll (\v -> name ++ " = " ++ show v) (return val) 
+-}
+
 

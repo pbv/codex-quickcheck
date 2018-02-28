@@ -26,9 +26,8 @@ import Control.Exception
 import System.Random
 import Data.List (intersperse)
 
--- * type class instances for C types
--- | Quickcheck generator & shrinking 
--- * signed numeric types
+-- orphan Arbitrary class instances for C types
+-- | signed numeric types
 instance Arbitrary CInt where
   arbitrary = CInt <$> arbitrary
   shrink (CInt i) = map CInt (shrink i)
@@ -49,7 +48,7 @@ instance Arbitrary CChar where
   arbitrary = CChar <$> arbitrary
   shrink (CChar i) = map CChar (shrink i)
 
--- * unsigned numeric types
+-- | unsigned numeric types
 instance Arbitrary CUInt where
   arbitrary = CUInt <$> arbitrary
   shrink (CUInt i) = map CUInt (shrink i)
@@ -66,7 +65,7 @@ instance Arbitrary CUChar where
   arbitrary = CUChar <$> arbitrary
   shrink (CUChar i) = map CUChar (shrink i)
 
--- * floating point numbers
+-- | floating point numbers
 instance Arbitrary CFloat where
   arbitrary = CFloat <$> arbitrary
   shrink (CFloat d) = map CFloat (shrink d)
@@ -76,11 +75,11 @@ instance Arbitrary CDouble where
   shrink (CDouble d) = map CDouble (shrink d)
 
 
-
 -- | exceptions for array index overflows
-data ArrayOverflow = ArrayBufferOverwrite
-                   | ArrayBufferUnderwrite
-                    deriving Show
+data ArrayOverflow
+  = ArrayBufferOverwrite
+  | ArrayBufferUnderwrite
+  deriving Show
 
 instance Exception ArrayOverflow
 
@@ -113,9 +112,10 @@ canarySize :: Int
 canarySize = 4
 
 
--- * utility functions
+-- | utility functions
 
-newtype CArray a = CArray [a] deriving (Eq, Functor, Foldable)
+newtype CArray a
+  = CArray [a] deriving (Eq, Functor, Foldable)
 
 instance Show a => Show (CArray a) where
   showsPrec _ (CArray xs) = showsArray xs
