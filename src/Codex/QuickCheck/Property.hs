@@ -5,6 +5,7 @@ import Test.QuickCheck.Gen
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Property hiding (forAll, forAllShrink)
 
+
 forArbitrary ::
   (Show a, Arbitrary a, Testable prop)
   => String
@@ -21,13 +22,15 @@ forAllShrink ::
   -> (a -> prop)
   -> Property
 forAllShrink label gen shrinker pf =
+  again $
   MkProperty $
   gen >>= \x' ->
     unProperty $
     shrinking shrinker x' $ \x ->
       counterexample (showf x) (pf x)
   where
-    showf x = if null label then show x else label ++ " = " ++ show x
+    showf x = '\t':if null label then show x
+                   else label ++ " = " ++ show x
 
 forAll ::
   (Show a, Testable prop)

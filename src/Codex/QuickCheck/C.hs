@@ -6,6 +6,7 @@ module Codex.QuickCheck.C
     module Foreign.C.Types,
     module Foreign.Ptr,
     module Foreign.Marshal.Array,
+    runC,
     withCheckedArray,
     withCheckedArrayLen,
     ArrayOverflow(..),
@@ -21,59 +22,12 @@ import Foreign.C.Types
 import Foreign.Ptr
 import Foreign.Marshal.Array
 
+import System.IO.Unsafe (unsafePerformIO)
+
 import Control.Monad (replicateM, unless)
 import Control.Exception
 import System.Random
 import Data.List (intersperse)
-
--- orphan Arbitrary class instances for C types
--- | signed numeric types
-instance Arbitrary CInt where
-  arbitrary = CInt <$> arbitrary
-  shrink (CInt i) = map CInt (shrink i)
-
-instance Arbitrary CLong where
-  arbitrary = CLong <$> arbitrary
-  shrink (CLong i) = map CLong (shrink i)
-
-instance Arbitrary CLLong where
-  arbitrary = CLLong <$> arbitrary
-  shrink (CLLong i) = map CLLong (shrink i)
-
-instance Arbitrary CShort where
-  arbitrary = CShort <$> arbitrary
-  shrink (CShort i) = map CShort (shrink i)
-
-instance Arbitrary CChar where
-  arbitrary = CChar <$> arbitrary
-  shrink (CChar i) = map CChar (shrink i)
-
--- | unsigned numeric types
-instance Arbitrary CUInt where
-  arbitrary = CUInt <$> arbitrary
-  shrink (CUInt i) = map CUInt (shrink i)
-
-instance Arbitrary CULong where
-  arbitrary = CULong <$> arbitrary
-  shrink (CULong i) = map CULong (shrink i)
-
-instance Arbitrary CULLong where
-  arbitrary = CULLong <$> arbitrary
-  shrink (CULLong i) = map CULLong (shrink i)
-
-instance Arbitrary CUChar where
-  arbitrary = CUChar <$> arbitrary
-  shrink (CUChar i) = map CUChar (shrink i)
-
--- | floating point numbers
-instance Arbitrary CFloat where
-  arbitrary = CFloat <$> arbitrary
-  shrink (CFloat d) = map CFloat (shrink d)
-
-instance Arbitrary CDouble where
-  arbitrary = CDouble <$> arbitrary
-  shrink (CDouble d) = map CDouble (shrink d)
-
 
 -- | exceptions for array index overflows
 data ArrayOverflow
@@ -83,6 +37,9 @@ data ArrayOverflow
 
 instance Exception ArrayOverflow
 
+-- | just a rename of unsafePerformIO (for convenience)
+runC :: IO a -> a
+runC = unsafePerformIO
 
 -- | C array allocators with buffer overflow checks
 withCheckedArray :: (Eq a, Random a, Storable a)

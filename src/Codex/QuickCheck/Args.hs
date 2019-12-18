@@ -36,7 +36,7 @@ getQCArgs = do
   argv <- getArgs
   arg0 <- getProgName
   case getOpt Permute options argv of
-    (o, _, []) -> return (foldl' (flip id) stdArgs{chatty=False} o)
+    (o, _, []) -> return (foldl' (flip ($)) stdArgs{chatty=False} o)
     (o, _, errs) ->
       let header = "usage: " ++ arg0 ++ " [OPTION...]"
       in ioError (userError (concat errs ++ usageInfo header options))
