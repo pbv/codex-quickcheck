@@ -11,8 +11,12 @@ module Codex.QuickCheck.C
     withCheckedArrayLen,
     ArrayOverflow(..),
     CArray(..),
+    toArray,
+    fromArray,
     showArray,
-    showsArray
+    showsArray,
+    fromBool,  
+    toBool
   ) where
 
 import Test.QuickCheck
@@ -68,11 +72,15 @@ withCheckedArrayLen values action = do
 canarySize :: Int
 canarySize = 4
 
-
 -- | utility functions
-
 newtype CArray a
   = CArray [a] deriving (Eq, Functor, Foldable)
+
+toArray :: [a] -> CArray a
+toArray = CArray
+
+fromArray :: CArray a -> [a]
+fromArray (CArray xs) = xs
 
 instance Show a => Show (CArray a) where
   showsPrec _ (CArray xs) = showsArray xs
@@ -89,5 +97,4 @@ showArray xs = showsArray xs ""
 showsArray :: Show a => [a] -> ShowS
 showsArray xs
   = ('{':) . (foldr (.) id $ intersperse (',':) $ map shows xs) . ('}':)
-
 

@@ -58,11 +58,11 @@ x ?<= y = counterexample fmt (x<=y)
 -- | append explanatory messages in case of failure
 (<?>) :: Property -> String -> Property
 prop <?> info
-  = counterexample ("Testing function " ++ info) prop
+  = counterexample ("Testing " ++ info) prop
 
 testing :: String -> Property -> Property
 testing info prop
-  = counterexample ("Testing function " ++ info ++ " with:") prop
+  = counterexample ("Testing " ++ info ++ " with:") prop
 
 -- | comparing floating point numbers
 absoluteEq :: RealFloat a => a -> a -> a -> Bool
