@@ -18,6 +18,9 @@ options =
   , Option [] ["maxDiscardRatio"]
     (ReqArg (\str args -> args{maxDiscardRatio=read str}) "INT")
     "Maximum ratio of discarded test cases"
+  , Option [] ["maxShrinks]"]
+    (ReqArg (\str args -> args{maxShrinks=read str}) "INT")
+    "Maximum number of shrinking steps to perform"
   , Option [] ["randSeed"]
     (ReqArg (\str args -> let seed = read str
                           in args {replay = Just (QC.mkQCGen seed,0)}) "INT")
