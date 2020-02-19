@@ -21,9 +21,11 @@ prop_insert_correct :: Property
 prop_insert_correct 
   = testing "insert_value" $
     forAllShrink "vec" ordArray ordShrink $ \vec ->
+    letArg "n" (length vec) $ \_ ->                                             
     forArbitrary "val" $ \val ->
        insert_wrapper vec val ?== toArray (List.insert val $ fromArray vec)
 
+ordArray :: Gen (CArray CInt)
 ordArray = CArray <$> orderedList
 ordShrink = shrinkMap (toArray . List.sort) fromArray
 
