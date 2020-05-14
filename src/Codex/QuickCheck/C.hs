@@ -1,5 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
 module Codex.QuickCheck.C
   (
     module Foreign.C,
@@ -15,11 +17,14 @@ module Codex.QuickCheck.C
     fromArray,
     showArray,
     showsArray,
-    fromBool,  
-    toBool
+    fromBool,
+    toBool,
+    CType(..),
+    cdecl
   ) where
 
 import Test.QuickCheck
+import qualified Codex.QuickCheck.Modifiers as M
 import Foreign
 import Foreign.C
 import Foreign.C.Types
@@ -98,3 +103,61 @@ showsArray :: Show a => [a] -> ShowS
 showsArray xs
   = ('{':) . (foldr (.) id $ intersperse (',':) $ map shows xs) . ('}':)
 
+type Name = String
+
+-- | show C type name for a given variable
+class CType t where
+  cbase :: t -> ShowS
+  cmodifiers :: t -> ShowS
+
+instance CType CInt where
+  cbase v = ("int "++)
+  cmodifiers v = id
+
+instance CType Int where
+  cbase v = ("int "++)
+  cmodifiers v = id
+
+instance CType (M.NonNegative CInt) where
+  cbase v = ("int " ++)
+  cmodifiers v = id
+
+instance CType (M.Positive CInt) where
+  cbase v = ("int " ++)
+  cmodifiers v = id
+
+instance CType CDouble where
+  cbase v = ("double " ++)
+  cmodifiers v = id
+
+instance CType CUInt where
+  cbase v = ("unsigned " ++)
+  cmodifiers v = id
+
+instance CType Char where
+  cbase v = ("char "++)
+  cmodifiers v = id
+
+instance CType CChar where
+  cbase v = ("char "++)
+  cmodifiers v = id
+
+instance CType String where
+  cbase v = ("char *"++)
+  cmodifiers v = id
+
+instance CType a => CType (CArray a) where
+  cbase (CArray vs)
+    = cbase (head vs)
+  cmodifiers (CArray vs)
+    = ("["++) . shows n . ("]"++) . cmodifiers (head vs)
+    where n = length vs
+
+cdecl :: (CType t, Show t) => t -> Name -> ShowS
+cdecl v name
+  = cbase v
+  . (name ++)
+  . cmodifiers v
+  . (" = "++)
+  . shows v
+  . (";"++)

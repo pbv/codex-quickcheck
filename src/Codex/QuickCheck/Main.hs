@@ -6,7 +6,8 @@ import Test.QuickCheck.Property
 import Test.QuickCheck.Test
 import Codex.QuickCheck.Args
 
-import Control.Monad(when)
+import Control.Monad(when, void)
+import Data.List (intercalate)
 
 quickCheckMain :: Testable prop => prop -> IO ()
 quickCheckMain prop = do
@@ -14,5 +15,3 @@ quickCheckMain prop = do
   result <- quickCheckWithResult args prop
   when (not $ chatty args) $ putStrLn (output result)
   if isSuccess result then exitSuccess else exitFailure
-
-

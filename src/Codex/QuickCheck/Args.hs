@@ -1,4 +1,3 @@
-
 module Codex.QuickCheck.Args (getQCArgs) where
 
 import           Data.List (foldl')
@@ -33,7 +32,6 @@ options =
     "Increase verbosity"
   ]
 
-
 getQCArgs :: IO Args
 getQCArgs = do
   argv <- getArgs
@@ -43,5 +41,3 @@ getQCArgs = do
     (o, _, errs) ->
       let header = "usage: " ++ arg0 ++ " [OPTION...]"
       in ioError (userError (concat errs ++ usageInfo header options))
-  
-
