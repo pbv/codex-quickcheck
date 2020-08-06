@@ -1,4 +1,6 @@
-
+{-
+  Various helper operators for assertions
+-}
 module Codex.QuickCheck.Assertions (
   testing,
   (?==), (==?), (?/=), (/=?),

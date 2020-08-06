@@ -1,5 +1,5 @@
 name:                codex-quickcheck
-version:             0.2.2.0
+version:             0.3.2.0
 synopsis:            Customized QuickCheck testing for Codex exercises
 description:         Please see README.md
 homepage:            https://github.com/pbv/codex-quickcheck
@@ -7,7 +7,7 @@ license:             MIT
 license-file:        LICENSE
 author:              Pedro Vasconcelos
 maintainer:          pbv@dcc.fc.up.pt
-copyright:           2017 Pedro Vasconcelos
+copyright:           2020 Pedro Vasconcelos
 category:            Testing
 build-type:          Simple
 extra-source-files:  README.md
@@ -17,6 +17,8 @@ library
   hs-source-dirs:      src
   exposed-modules:     Codex.QuickCheck
                        Codex.QuickCheck.C
+                       Codex.QuickCheck.C.Property
+                       Codex.QuickCheck.C.Types
                        Codex.QuickCheck.Modifiers
                        Codex.QuickCheck.Property
                        Codex.QuickCheck.Main

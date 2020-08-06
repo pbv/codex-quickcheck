@@ -1,4 +1,6 @@
-
+{-
+   Main driver: handle command-line options and test a property
+-}
 module Codex.QuickCheck.Main where
 
 import System.Exit

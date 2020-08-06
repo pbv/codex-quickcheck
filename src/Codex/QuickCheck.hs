@@ -1,3 +1,6 @@
+{-
+   Top-level module for testing Haskell code; this just re-exports various sub-modules
+-}
 
 module Codex.QuickCheck
    ( module Test.QuickCheck.Gen
@@ -10,7 +13,6 @@ module Codex.QuickCheck
    , module Codex.QuickCheck.Modifiers
    , module Codex.QuickCheck.Assertions
    , module Codex.QuickCheck.Property
-   , module Codex.QuickCheck.C
    , module Codex.QuickCheck.Main
    ) where
 
@@ -25,6 +27,5 @@ import Test.QuickCheck.All
 import Codex.QuickCheck.Modifiers
 import Codex.QuickCheck.Property
 import Codex.QuickCheck.Assertions
-import Codex.QuickCheck.C
 import Codex.QuickCheck.Main
 

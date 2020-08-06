@@ -1,15 +1,17 @@
 {-
-   Customised quantified properties for testing Haskell code
+   Properties for testing C code;
+   generates C declarations for generating test code (e.g. for debuggers)
  -}
 
-module Codex.QuickCheck.Property where
+module Codex.QuickCheck.C.Property where
 
 import Test.QuickCheck.Gen
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Property hiding (forAll, forAllShrink)
+import Codex.QuickCheck.C.Types (CType(..))
 
 forArbitrary ::
-  (Show a, Arbitrary a, Testable prop)
+  (CType a, Show a, Arbitrary a, Testable prop)
   => String
   -> (a -> prop)
   -> Property
@@ -17,7 +19,7 @@ forArbitrary name pf
   = forAllShrink name arbitrary shrink pf
 
 forAllShrink ::
-  (Show a, Testable prop)
+  (CType a, Show a, Testable prop)
   => String
   -> Gen a
   -> (a -> [a])
@@ -32,10 +34,10 @@ forAllShrink label gen shrinker pf =
       counterexample (showf x) (pf x)
   where
     showf x = '\t':if null label then show x
-                   else decl x label ""
+                   else cdecl x label ""
 
 forAll ::
-  (Show a, Testable prop)
+  (CType a, Show a, Testable prop)
   => String
   -> Gen a
   -> (a -> prop)
@@ -44,7 +46,7 @@ forAll label gen pf
   = forAllShrink label gen (const []) pf
 
 letArg ::
-  (Show a, Testable prop)
+  (CType a, Show a, Testable prop)
   => String
   -> a
   -> (a -> prop)
@@ -53,5 +55,11 @@ letArg name val
   = forAll name (return val)
 
 
-decl :: Show t => t -> String -> ShowS
-decl v name  = (name ++) . (" = "++) . shows v
+cdecl :: (CType t, Show t) => t -> String -> ShowS
+cdecl v name
+  = cbase v
+  . (name ++)
+  . cmodifiers v
+  . (" = "++)
+  . shows v
+  . (";"++)

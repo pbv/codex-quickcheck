@@ -1,6 +1,7 @@
---
--- | custom versions of modifiers with nicer Show instances
---
+{-
+  Custom versions of QuickCheck modifiers using
+  Show instances that hide constructors (for cleaner user feedback) 
+-}
 module Codex.QuickCheck.Modifiers where
 
 import Data.List (nub)

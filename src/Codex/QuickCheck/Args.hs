@@ -1,3 +1,7 @@
+{-
+   Parse command-line options for testing arguments
+-}
+
 module Codex.QuickCheck.Args (getQCArgs) where
 
 import           Data.List (foldl')
