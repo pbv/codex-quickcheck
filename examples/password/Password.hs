@@ -5,7 +5,7 @@
 -}
 module Main where
 
-import Codex.QuickCheck
+import Codex.QuickCheck.C
 import Control.Monad
 import Control.Exception
 import Data.Char
@@ -33,7 +33,7 @@ strong_spec xs
 -- | correctness property
 prop_correct :: Property
 prop_correct
-  = testing "strong_passwd" $
+  = testing "strong_passwd(str)" $
     forAllShrink "str" genPasswd shrinkPasswd $
     \xs -> strong_passwd_wrapper xs ?== fromBool (strong_spec xs)
 

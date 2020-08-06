@@ -3,7 +3,7 @@
 --
 module Main where
 
-import           Codex.QuickCheck
+import           Codex.QuickCheck.C
 import qualified Data.List as List
 import           Data.Char
 
@@ -19,11 +19,14 @@ sort_wrapper (CArray values) =
      
 prop_correct :: Property
 prop_correct 
-  = testing "sort_desc" $
+  = testing "sort_desc(vec, n)" $
     forArbitrary "vec" $ \vec ->
-       letArg "n" (fromIntegral $ length vec) $ \_ ->
+       letArg "n" (toCInt $ length vec) $ \_ ->
        sort_wrapper vec ?== toArray (reverse $ List.sort $ fromArray vec)
 
+
+toCInt :: Int -> CInt
+toCInt = fromIntegral
 
 main = quickCheckMain prop_correct
 

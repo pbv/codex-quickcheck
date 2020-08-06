@@ -3,7 +3,7 @@
 --
 module Main where
 
-import           Codex.QuickCheck
+import           Codex.QuickCheck.C
 import qualified Data.List as List
 import           Data.Char
 
@@ -19,7 +19,7 @@ insert_wrapper vec val =
     
 prop_insert_correct :: Property
 prop_insert_correct 
-  = testing "insert_value" $
+  = testing "insert_value(vec, n, val)" $
     forAllShrink "vec" ordArray ordShrink $ \vec ->
     letArg "n" (length vec) $ \_ ->                                             
     forArbitrary "val" $ \val ->
